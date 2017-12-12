@@ -2,9 +2,10 @@ pragma solidity ^0.4.18;
 
 import "./PayrollInterface.sol";
 import "./Owned.sol";
-import "./token/HumanStandardToken.sol";
+import "./date/Datetime.sol";
+import "./Token/EURToken.sol";
 
-contract Payroll is HumanStandardToken, PayrollInterface, Owned {
+contract Payroll is EURToken, PayrollInterface, Owned, Datetime {
 
     //EVENTS
     event NewEmployee(uint256 employeeId, address accountAddress, address[] allowedTokens, uint256 initialYearlyEURSalary);
@@ -16,7 +17,10 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
         uint256 employeedId;
         address accountAddress;
         address[] allowedToken;
+        uint256[] tokenDistribution;
         uint256 yearlyEURSalary;
+        uint lastPayCheck;
+        uint lastDistributionDay;
     }
 
     address[] private employeeIndex;
@@ -31,7 +35,8 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
 
     address oracle;
 
-    uint256 internal totalYearlySalary;
+    uint256 internal updatedTotalYearlySalary = 0;
+
     //MODIFIER
     modifier onlyEmployee(){
         if (!(m_employees[msg.sender].accountAddress == msg.sender)) {
@@ -48,21 +53,29 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
     }
 
     //CONSTRUTOR
-    function Payroll() internal {
-        var eurToken = Token(address(0), 0); 
-        m_token[eurToken.token] = eurToken;
+    function Payroll(address _oracle) public {
+        insertToken(address(0x123), 0);
+        oracle = _oracle;
     }
 
     //FUNCTIONS
+    function insertToken(address newTokenAddress, uint256 EURExchangeRate) internal {
+        require(newTokenAddress != address(0) && EURExchangeRate >= 0);
+
+        var newToken = Token(newTokenAddress, EURExchangeRate);
+        m_token[newTokenAddress] = newToken;
+    }
+
     function addEmployee(address accountAddress, address[] allowedTokens, uint256 initialYearlyEURSalary) onlyOwner public {
         require(accountAddress != address(0) && allowedTokens.length > 0 && initialYearlyEURSalary > 0);
 
         if (!employeeExist(accountAddress)) {
-            var newEmployee = Employee(employeeIndex.length, accountAddress, allowedTokens, initialYearlyEURSalary);
+            var newEmployee = Employee(employeeIndex.length, accountAddress, allowedTokens, initialYearlyEURSalary, now, now);
 
             NewEmployee(employeeIndex.length, accountAddress, allowedTokens, initialYearlyEURSalary);
-
             m_employees[accountAddress] = newEmployee;
+
+            updateTotalSalary(initialYearlyEURSalary, 0);
             employeeIndex.push(accountAddress);
         }
     }
@@ -70,6 +83,9 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
     function setEmployeeSalary(uint256 employeeId, uint256 newSalary) onlyOwner public {
         address employeddAddress = getEmployeeById(employeeId);
         if (employeeExist(employeddAddress)) {
+            
+            updateTotalSalary(newSalary,  m_employees[employeddAddress].yearlyEURSalary);
+
             m_employees[employeddAddress].yearlyEURSalary = newSalary;
         }
     }
@@ -81,6 +97,8 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
             var employeeToMove = employeeIndex[employeeIndex.length - 1];
 
             employeeIndex[employeeId] = employeeToMove;
+
+            updateTotalSalary(0,  m_employees[employeeToDelete].yearlyEURSalary);
 
             m_employees[employeeToMove].employeedId = employeeId;
 
@@ -113,14 +131,39 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
 
     
     function addTokenFunds(address _spender, uint256 _value, bytes _extraData) public {
-        //Calling from HumanStandardToken
+        //Calling from EURToken
         approveAndCall(_spender, _value, _extraData);
+    }
+
+    function calculatePayrollBurnrate() public view returns (uint256) {
+        return updatedTotalYearlySalary / 12;
+    }
+
+    function determineAllocation(address[] tokens, uint256[] distribution) public onlyEmployee {
+        Employee storage employee = m_employees[msg.sender];
+        
+        //#TODO: IMPLEMENT 6 MONTH CHECK
+        
+        //must be the same length
+         require(tokens.length == distribution.length);
+
+        //Employee can add new tokens as well
+        employee.tokens = tokens;
+        employee.distribution = distribution;
+        employee.lastDistributionDay = now;
+    }
+
+    function payday() public onlyEmployee {
+        Employee storage employee = m_employees[msg.sender];
+
+        //#TODO: IMPLEMENT 1 MONTH CHECK
+
     }
 
     function setExchangeRate(address token, uint256 exchangeRate) public onlyOracle {
         require(exchangeRate > 0);
 
-        HumanStandardToken standardToken = HumanStandardToken(m_token[token].token);
+        EURToken standardToken = EURToken(m_token[token].token);
         m_token[token].EURExchangeRate = exchangeRate * standardToken.decimals();
     }    
 
@@ -129,5 +172,9 @@ contract Payroll is HumanStandardToken, PayrollInterface, Owned {
 
     function scapeHatch() public onlyOwner {
         msg.sender.transfer(this.balance);
+    }
+
+    function updateTotalSalary(uint256 salaryNow, uint256 salaryBefore) internal {
+        updatedTotalYearlySalary += salaryNow - salaryBefore;
     }
 }

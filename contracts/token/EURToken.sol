@@ -2,7 +2,8 @@ pragma solidity ^0.4.18;
 
 import "./StandardToken.sol";
 
-contract HumanStandardToken is StandardToken {
+//Imported from Zeppelin and edited.
+contract EURToken is StandardToken {
 
     /* Public variables of the token */
 
@@ -15,9 +16,9 @@ contract HumanStandardToken is StandardToken {
     string public name = "Euro";                   //fancy name: eg Simon Bucks
     uint8 public decimals = 2;                //How many decimals to show. ie. There could 1000 base units with 3 decimals. Meaning 0.980 SBX = 980 base units. It's like comparing 1 wei to 1 ether.
     string public symbol = "EUR";                 //An identifier: eg SBX
-    string public version = "H0.1";       //human 0.1 standard. Just an arbitrary versioning scheme.
+    string public version = "0.1";       //human 0.1 standard. Just an arbitrary versioning scheme.
 
-     function HumanStandardToken(uint256 _initialAmount, string _tokenName, uint8 _decimalUnits, string _tokenSymbol) public {
+     function EURToken(uint256 _initialAmount, string _tokenName, uint8 _decimalUnits, string _tokenSymbol) public {
         balances[msg.sender] = _initialAmount;               // Give the creator all initial tokens
         totalSupply = _initialAmount;                        // Update total supply
         name = _tokenName;                                   // Set the name for display purposes
