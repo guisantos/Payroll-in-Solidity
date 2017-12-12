@@ -1,0 +1,220 @@
+{
+  "contractName": "PayrollInterface",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "accountAddress",
+          "type": "address"
+        },
+        {
+          "name": "allowedTokens",
+          "type": "address[]"
+        },
+        {
+          "name": "initialYearlyEURSalary",
+          "type": "uint256"
+        }
+      ],
+      "name": "addEmployee",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.18;\r\n\r\n// Project \r\n// Write the code (deployable to the EVM), publish it on GitHub (public or private) and send the link to the repo. Please include any additional information you consider important. \r\n// The code we are looking for could be conformant to the following interface. Feel free to remove/add any functions as you see fit: \r\n// For the sake of simplicity lets assume EUR is a ERC20 token \r\n// Also lets assume we can 100% trust the exchange rate oracle\r\n \r\ninterface PayrollInterface { \r\n/* OWNER ONLY */ \r\n    function addEmployee(address accountAddress, address[] allowedTokens, uint256 initialYearlyEURSalary) public; \r\n//     function setEmployeeSalary(uint256 employeeId, uint256 yearlyEURSalary) public; \r\n//     function removeEmployee(uint256 employeeId) public; \r\n\r\n//     function addFunds() payable public; \r\n//    function scapeHatch() public; \r\n\r\n// // function addTokenFunds()? // Use approveAndCall or ERC223 tokenFallback \r\n//     function getEmployeeCount() view public returns (uint256); \r\n//     function getEmployee(uint256 employeeId) view public returns (address employee); // Return all important info too \r\n//     function calculatePayrollBurnrate() view public returns (uint256); // Monthly EUR amount spent in salaries \r\n//     function calculatePayrollRunway() view public returns (uint256); // Days until the contract can run out of funds\r\n\r\n// /* EMPLOYEE ONLY */ \r\n//     function determineAllocation(address[] tokens, uint256[] distribution) public; // only callable once every 6 months \r\n//     function payday() public; // only callable once a month \r\n\r\n// /* ORACLE ONLY */ \r\n//     function setExchangeRate(address token, uint256 EURExchangeRate) public; // uses decimals from token  \r\n}",
+  "sourcePath": "C:\\Ethereum\\Payroll\\contracts\\PayrollInterface.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/C/Ethereum/Payroll/contracts/PayrollInterface.sol",
+      "exportedSymbols": {
+        "PayrollInterface": [
+          159
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 148,
+        "name": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            159
+          ],
+          "name": "PayrollInterface",
+          "scope": 160
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "constant": false,
+              "implemented": false,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "addEmployee",
+              "payable": false,
+              "scope": 159,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "accountAddress",
+                      "scope": 158,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 149,
+                        "name": "ElementaryTypeName",
+                        "src": "566:7:2"
+                      }
+                    ],
+                    "id": 150,
+                    "name": "VariableDeclaration",
+                    "src": "566:22:2"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "allowedTokens",
+                      "scope": 158,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address[] memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "address[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "address",
+                              "type": "address"
+                            },
+                            "id": 151,
+                            "name": "ElementaryTypeName",
+                            "src": "590:7:2"
+                          }
+                        ],
+                        "id": 152,
+                        "name": "ArrayTypeName",
+                        "src": "590:9:2"
+                      }
+                    ],
+                    "id": 153,
+                    "name": "VariableDeclaration",
+                    "src": "590:23:2"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "initialYearlyEURSalary",
+                      "scope": 158,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 154,
+                        "name": "ElementaryTypeName",
+                        "src": "615:7:2"
+                      }
+                    ],
+                    "id": 155,
+                    "name": "VariableDeclaration",
+                    "src": "615:30:2"
+                  }
+                ],
+                "id": 156,
+                "name": "ParameterList",
+                "src": "565:81:2"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 157,
+                "name": "ParameterList",
+                "src": "653:0:2"
+              }
+            ],
+            "id": 158,
+            "name": "FunctionDefinition",
+            "src": "545:109:2"
+          }
+        ],
+        "id": 159,
+        "name": "ContractDefinition",
+        "src": "491:1265:2"
+      }
+    ],
+    "id": 160,
+    "name": "SourceUnit",
+    "src": "0:1756:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2017-12-02T16:32:01.827Z"
+}
