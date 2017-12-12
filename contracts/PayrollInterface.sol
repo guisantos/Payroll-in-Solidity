@@ -18,12 +18,12 @@ interface PayrollInterface {
     function addTokenFunds(address _spender, uint256 _value, bytes _extraData) public; // Use approveAndCall or ERC223 tokenFallback 
     function getEmployeeCount() public view returns (uint256); 
     function getEmployee(uint256 employeeId) public view returns (address employeeAddress, address[] allowedToken, uint256 salary); 
-//     function calculatePayrollBurnrate() public view returns (uint256); // Monthly EUR amount spent in salaries 
-//     function calculatePayrollRunway() public view returns (uint256); // Days until the contract can run out of funds
+    function calculatePayrollBurnrate() public view returns (uint256); // Monthly EUR amount spent in salaries 
+    function calculatePayrollRunway() public view returns (uint256); // Days until the contract can run out of funds
 
 // /* EMPLOYEE ONLY */ 
-//     function determineAllocation(address[] tokens, uint256[] distribution) public; // only callable once every 6 months 
-//     function payday() public; // only callable once a month 
+    function determineAllocation(address[] tokens, uint256[] distribution) public; // only callable once every 6 months 
+    function payday() public; // only callable once a month 
 
 // /* ORACLE ONLY */ 
     function setExchangeRate(address token, uint256 EURExchangeRate) public; // uses decimals from token  
